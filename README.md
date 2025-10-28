@@ -43,9 +43,15 @@ sudo apt install git
 git clone https://github.com/Silron2402/Linux_final2.git
 ```
 
-Напишите заголовок: build Или сборка
+Перейдите в папку Linux_final2/scripts
+```bash
+cd Linux_final2/scripts
+```
 
-sudo ./<путь до папки scripts>/scripts/rosinstall.sh
+Запустите скрипт для установки ROS1
+```bash
+sudo bash ./<путь до папки scripts>/scripts/rosinstall.sh
+```
 
 Для установки ROS2 Iron был написан скрипт, представленный ниже:
 ``` bash

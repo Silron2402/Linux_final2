@@ -21,8 +21,8 @@ https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key ad
 
 #Установка ROS1
 echo "Установка ROS1 full версии..."
-apt update
-apt install ros-noetic-desktop-full
+#sudo apt update
+sudo apt install ros-noetic-desktop-full
 
 #Настройка окружения
 echo "Настройка окружения ROS1..."
