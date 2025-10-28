@@ -33,6 +33,16 @@
 ### Этап 2. Установка ROS2 на Raspberry Pi и настройка рабочей среды
 #### 2.1 Установка системы ROS
 
+Установите git с помощью команды 
+```bash
+sudo apt install git
+```
+
+Склонируйте репозиторий с помощью команды
+```bash
+git clone https://github.com/Silron2402/Linux_final2.git
+```
+
 Напишите заголовок: build Или сборка
 
 sudo ./<путь до папки scripts>/scripts/rosinstall.sh
