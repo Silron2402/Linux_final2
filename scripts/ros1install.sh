@@ -74,10 +74,8 @@ done
 log_msg "Добавление репозитория ROS1..."
 log_msg "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
-# Добавление GPG-ключа
-log_msg "Загрузка и добавление GPG-ключа ROS..."
 if ! curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -; then
-    echo "Ошибка: не удалось добавить GPG‑ключ ROS"
+    log_msg "Ошибка: не удалось добавить GPG‑ключ ROS"
     exit 1
 fi
 
@@ -86,7 +84,7 @@ log_msg "Обновление списка пакетов"
 apt-get update
 
 #Установка ROS1
-if ! is_package_installed "ros-$ROS_DISTRO-desktop-full"; then
+if is_package_installed "ros-$ROS_DISTRO-desktop-full"; then
     log_msg "Пакет ROS1 уже установлен"
 else
     echo "Установка ROS1 full версии..."
