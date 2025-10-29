@@ -49,7 +49,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Установка и настройка локали
-log_msg "Настройка системной локали..."
+echo "Настройка системной локали..."
 apt-get update
 apt-get install -y locales
 locale-gen "$LOCALE"
@@ -68,13 +68,13 @@ for pkg in "${required_packages1[@]}"; do
 done
 
 # Добавление репозитория ROS1
-log_msg "Добавление репозитория ROS1..."
+echo "Добавление репозитория ROS1..."
 echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
 # Добавление GPG-ключа
 log_msg "Загрузка и добавление GPG-ключа ROS..."
 if ! curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -; then
-    log_msg "Ошибка: не удалось добавить GPG‑ключ ROS"
+    echo "Ошибка: не удалось добавить GPG‑ключ ROS"
     exit 1
 fi
 
