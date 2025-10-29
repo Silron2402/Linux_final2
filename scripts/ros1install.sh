@@ -84,12 +84,12 @@ log_msg "Обновление списка пакетов"
 apt-get update
 
 #Установка ROS1
-if is_package_installed "ros-$ROS_DISTRO-desktop"; then
+if is_package_installed "ros-$ROS_DISTRO-desktop-full"; then
     log_msg "Пакет ROS1 уже установлен"
 else
     echo "Установка ROS1 full версии..."
     #установка
-    apt-get install -y "ros-$ROS_DISTRO-desktop"
+    apt-get install -y "ros-$ROS_DISTRO-desktop-full"
 fi
 
 #Настройка окружения
