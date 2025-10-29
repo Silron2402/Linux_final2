@@ -6,8 +6,11 @@
 #настройка пайпа возвращать код ошибки первой упавшей команды.
 set -eu -o pipefail
 
+# Обработка прерывания скриптом (Ctrl+C)
+trap 'log_msg "Скрипт прерван пользователем"; exit 1' INT
+
 #логирование с датой для отладки
-#log_msg() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"; }
+log_msg() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"; }
 
 # Функция проверки установленного пакета
 is_package_installed() {
@@ -38,18 +41,18 @@ required_packages2=(
 
 #проверка интернет-соединения
 if ! ping -c 1 github.com &> /dev/null; then
-    echo "Отсутсвует интернет‑соединение!"
+    log_msg "Отсутсвует интернет‑соединение!"
     exit 1
 fi
 
 #Проверка прав суперпользователя
 if [ "$(id -u)" != "0" ]; then
-    echo "Необходимо запустить скрипт от имени root или c sudo"
+    log_msg "Необходимо запустить скрипт от имени root или c sudo"
     exit 1
 fi
 
 # Установка и настройка локали
-echo "Настройка системной локали..."
+log_msg "Настройка системной локали..."
 apt-get update
 apt-get install -y locales
 locale-gen "$LOCALE"
@@ -57,19 +60,19 @@ update-locale LC_ALL="$LOCALE" LANG="$LOCALE"
 export LANG="$LOCALE" LC_ALL="$LOCALE"
 
 #Выполним установку и настройку базовых пакетов
-echo "Установка базовых пакетов..."
+log_msg "Установка базовых пакетов..."
 for pkg in "${required_packages1[@]}"; do
     if ! is_package_installed "$pkg"; then
-        echo "Пакет $pkg не установлен. Устанавливаем..."
+        log_msg "Пакет $pkg не установлен. Устанавливаем..."
         apt-get install -y "$pkg"
     else
-        echo "Пакет $pkg уже установлен"
+        log_msg "Пакет $pkg уже установлен"
     fi
 done
 
 # Добавление репозитория ROS1
-echo "Добавление репозитория ROS1..."
-echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+log_msg "Добавление репозитория ROS1..."
+log_msg "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
 # Добавление GPG-ключа
 log_msg "Загрузка и добавление GPG-ключа ROS..."
@@ -79,12 +82,12 @@ if ! curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | ap
 fi
 
 # Обновление списка пакетов
-echo "Обновление списка пакетов"
+log_msg "Обновление списка пакетов"
 apt-get update
 
 #Установка ROS1
-if dpkg -s "ros-$ROS_DISTRO-desktop-full" &>/dev/null; then
-    echo "Пакет установлен"
+if ! is_package_installed "ros-$ROS_DISTRO-desktop-full"; then
+    log_msg "Пакет ROS1 уже установлен"
 else
     echo "Установка ROS1 full версии..."
     #установка
@@ -92,29 +95,29 @@ else
 fi
 
 #Настройка окружения
-echo "Настройка окружения ROS1..."
-echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+log_msg "Настройка окружения ROS1..."
+log_msg "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 source /opt/ros/"$ROS_DISTRO"/setup.bash
 
 #Установка и настройка дополнительных инструментов
-echo "Установка дополнительных инструментов..."
+log_msg "Установка дополнительных инструментов..."
 for pkg in "${required_packages2[@]}"; do
     if ! is_package_installed "$pkg"; then
-        echo "Пакет $pkg не установлен. Устанавливаем..."
+        log_msg "Пакет $pkg не установлен. Устанавливаем..."
         apt-get install -y "$pkg"
     else
-        echo "Пакет $pkg уже установлен"
+        log_msg "Пакет $pkg уже установлен"
     fi
 done
 
 #инициализация rosdep
-echo "Инициализация rosdep.."
+log_msg "Инициализация rosdep.."
 if ! rosdep init; then
-    echo "Ошибка: rosdep init failed"
+    log_msg "Ошибка: rosdep init failed"
     exit 1
 fi
 rosdep update
 
 #Финальное сообщение
-echo "Установка ROS1 завершена успешно!"
+log_msg "Установка ROS1 завершена успешно!"
 
