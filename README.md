@@ -45,92 +45,28 @@ git clone https://github.com/Silron2402/Linux_final2.git
 
 Перейдите в папку Linux_final2/scripts
 ```bash
-cd Linux_final2/scripts
+cd ./Linux_final2/scripts
 ```
 
 Запустите скрипт для установки ROS1
 ```bash
-sudo bash ./<путь до папки scripts>/scripts/rosinstall.sh
+sudo bash ./<путь до папки scripts>/scripts/ros1install.sh
 ```
 
-Для установки ROS2 Iron был написан скрипт, представленный ниже:
-``` bash
-#!bin/bash
-
-#Проверим права суперпользователя
-if [ "$(id -u)" != "0" ]; then
-    echo "Необходимо запустить скрипт от имени root или c sudo"
-    exit 1
-fi
-
-#Выполним установку и настройку системной локали
-echo "Настройка системной локали..."
-sudo apt-get update && sudo apt install -y locales
-sudo locale-gen en_US.UTF-8
-sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-export LANG=en_US.UTF-8
-echo "Завершена установка и настройка системной локали"
-
-#Добавление репозитория ROS2
-echo "Добавление репозитория ROS2..."
-sudo apt update && sudo apt install -y curl gnupg lsb-release
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-
-#Установка ROS2
-echo "Установка ROS2 Desktop версии..."
-sudo apt update
-sudo apt install -y ros-iron-desktop
-
-#Настройка окружения
-echo "Настройка окружения ROS2..."
-echo "source /opt/ros/iron/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-
-echo "Установка дополнительных инструментов..."
-sudo apt install -y\
-    python3-rosdep \
-    python3-vstool \
-    python3-colcon-common-extensions
-    python3-flake-8 \
-    python3-pytest-cov \
-    python3-pip
-
-#Установка пакета setuptools
-pip3 install setuptools==58.2.0
-
-echo "Инициализация rosdep"
-sudo rosdep init
-rosdep update
-
-#Обновление существующего терминала
-source ~/.bashrc
-echo "Установка ROS2 завершена успешно!"
-```
-Для запуска установки следует вызвать команду
+Для проверки работоспособности ROS1 необходимо ввести команду в терминале 
 ```bash
-sudo ./<путь до папки scripts>/scripts/rosinstall.sh
-``` 
-
-Для проверки работоспособности ROS2 необходимо ввести команду в терминале 
-```bash
-ros2 version
+roscore
 ```
 
 #### 2.2 Создание рабочего пространства ROS2
-Для создания рабочего пространства выполним следующие действия:
-1. Создадим структуру каталогов c помощью команды
+Для создания рабочего пространства выполните следующие действия:
+
 ```bash
-mkdir -p ~/ros2_ws/src
+mkdir -p ~/catkin_ws/src  #Создание структуры каталогов
+cd ~/catkin_ws/           #Переход в папку catlkin_ws
+catkin_make               #Cборка рабочего пространства
 ```
-Выполним переход в папку src 
-```bash
-cd ~/ros2_ws
-```
-2. Выполним сборку рабочего пространства с помощью команды:
-```bash
-colcon build
-```
+
 3. Активируем рабочее пространство с помощью команды:
 ```bash
 source install/setup.bash

@@ -34,8 +34,8 @@ sudo apt install -y \
     python3-rosdep \
     python3-rosinstall \
     python3-rosinstall-generator \
-    python3-wstool duild-essential \
-    
+    python3-wstool build-essential \
+
 
 echo "Инициализация rosdep.."
 sudo apt install python3-rosdep
