@@ -95,7 +95,7 @@ fi
 
 #Настройка окружения
 log_msg "Настройка окружения ROS1..."
-log_msg "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
 source /opt/ros/"$ROS_DISTRO"/setup.bash
 
 #Установка и настройка дополнительных инструментов
