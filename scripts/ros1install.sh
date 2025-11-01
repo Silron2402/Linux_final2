@@ -99,9 +99,36 @@ fi
 
 #Настройка окружения
 log_msg "Настройка окружения ROS1..."
+
+# Определяем путь к setup.bash
+ROS_SETUP="/opt/ros/$ROS_DISTRO/setup.bash"
+
+# Проверяем существование файла
+if [ ! -f "$ROS_SETUP" ]; then
+    log_msg "Ошибка: файл $ROS_SETUP не найден!"
+    exit 1
+fi
+
+# Проверяем существование файла
+if [ ! -f "~/.bashrc" ]; then
+    log_msg "Ошибка: файл ~/.bashrc не найден!"
+    exit 1
+fi
+
+# Добавляем в .bashrc (для текущего пользователя)
+echo "source $ROS_SETUP" >> ~/.bashrc
+log_msg "Строка 'source $ROS_SETUP' добавлена в ~/.bashrc"
+
+# Применяем настройки в текущем окружении
+source "$ROS_SETUP"
+log_msg "Окружение ROS1 настроено успешно!"
+
+
+
+
 #echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> "$USER_HOME/.bashrc"
-su -c 'echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> $USER_HOME/.bashrc' 
-source /opt/ros/"$ROS_DISTRO"/setup.bash
+#№su -c 'echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> $USER_HOME/.bashrc' 
+#source /opt/ros/"$ROS_DISTRO"/setup.bash
 
 #Установка и настройка дополнительных инструментов
 log_msg "Установка дополнительных инструментов..."
