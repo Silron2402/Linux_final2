@@ -138,13 +138,21 @@ if [ ! -f $BASHRC ]; then
     exit 1
 fi
 
-# Добавляем в .bashrc (для текущего пользователя)
-echo "source $ROS_SETUP" >> $HOME/.bashrc
-log_msg "Строка 'source $ROS_SETUP' добавлена в ~/.bashrc"
+# Проверяем, не добавлена ли строка раньше
+if ! grep -q "source $ROS_SETUP" "$BASHRC"; then
+    echo "source $ROS_SETUP" >> "$BASHRC"
+    log_msg "Строка 'source $ROS_SETUP' добавлена в $BASHRC"
+else
+    log_msg "Строка 'source $ROS_SETUP' уже есть в $BASHRC"
+fi
 
 # Применяем настройки в текущем окружении
-source "$ROS_SETUP"
-log_msg "Окружение ROS1 настроено успешно!"
+if source "$ROS_SETUP"; then
+    log_msg "Окружение ROS1 настроено успешно!"
+else
+    log_msg "Ошибка: не удалось выполнить source $ROS_SETUP"
+    exit 1
+fi
 
 
 
