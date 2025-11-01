@@ -97,6 +97,29 @@ else
     apt-get install -y "ros-$ROS_DISTRO-desktop-full"
 fi
 
+# Определяем домашний каталог пользователя, запустившего скрипт (даже через sudo)
+if [ -n "$SUDO_USER" ]; then
+    # Если скрипт запущен через sudo, берём домашний каталог исходного пользователя
+    USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+elif [ -n "$SUDO_UID" ]; then
+    # Альтернатива: по UID
+    USER_HOME=$(getent passwd "$SUDO_UID" | cut -d: -f6)
+else
+    # Иначе используем текущий $HOME (например, если запущен без sudo)
+    USER_HOME="$HOME"
+fi
+
+# Проверяем, что USER_HOME определён
+if [ -z "$USER_HOME" ]; then
+    log_msg "Ошибка: не удалось определить домашнего каталога пользователя"
+    exit 1
+fi
+
+BASHRC="$USER_HOME/.bashrc"
+
+echo $BASHRC
+
+
 #Настройка окружения
 log_msg "Настройка окружения ROS1..."
 
@@ -110,8 +133,8 @@ if [ ! -f "$ROS_SETUP" ]; then
 fi
 
 # Проверяем существование файла
-if [ ! -f $HOME/.bashrc ]; then
-    log_msg "Ошибка: файл $HOME/.bashrc не найден!"
+if [ ! -f $BASHRC ]; then
+    log_msg "Ошибка: файл $BASHRC не найден!"
     exit 1
 fi
 
