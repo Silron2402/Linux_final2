@@ -110,13 +110,13 @@ if [ ! -f "$ROS_SETUP" ]; then
 fi
 
 # Проверяем существование файла
-if [ ! -f "~/.bashrc" ]; then
-    log_msg "Ошибка: файл ~/.bashrc не найден!"
+if [ ! -f $HOME/.bashrc ]; then
+    log_msg "Ошибка: файл $HOME/.bashrc не найден!"
     exit 1
 fi
 
 # Добавляем в .bashrc (для текущего пользователя)
-echo "source $ROS_SETUP" >> ~/.bashrc
+echo "source $ROS_SETUP" >> $HOME/.bashrc
 log_msg "Строка 'source $ROS_SETUP' добавлена в ~/.bashrc"
 
 # Применяем настройки в текущем окружении
