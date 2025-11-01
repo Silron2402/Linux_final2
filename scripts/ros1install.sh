@@ -147,19 +147,15 @@ else
 fi
 
 # Применяем настройки в текущем окружении
+set +u #Отключим проверку обнаружения неопределенных переменных
 if source "$ROS_SETUP"; then
     log_msg "Окружение ROS1 настроено успешно!"
 else
     log_msg "Ошибка: не удалось выполнить source $ROS_SETUP"
     exit 1
 fi
+set -u #Включим проверку обнаружения неопределенных переменных
 
-
-
-
-#echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> "$USER_HOME/.bashrc"
-#№su -c 'echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> $USER_HOME/.bashrc' 
-#source /opt/ros/"$ROS_DISTRO"/setup.bash
 
 #Установка и настройка дополнительных инструментов
 log_msg "Установка дополнительных инструментов..."
