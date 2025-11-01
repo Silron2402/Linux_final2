@@ -39,6 +39,10 @@ required_packages2=(
     "build-essential"               # Компиляторы и инструменты сборки
 )
 
+#Получение имени пользователя и адреса домашнего каталога
+#USERNAME=$(whoami)
+#USER_HOME=$(getent passwd "$USERNAME" | cut -d: -f6)
+
 #проверка интернет-соединения
 if ! ping -c 1 github.com &> /dev/null; then
     log_msg "Отсутсвует интернет‑соединение!"
@@ -95,7 +99,8 @@ fi
 
 #Настройка окружения
 log_msg "Настройка окружения ROS1..."
-echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+#echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+su -c 'echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc' 
 #source /opt/ros/"$ROS_DISTRO"/setup.bash
 
 #Установка и настройка дополнительных инструментов
