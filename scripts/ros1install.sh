@@ -149,7 +149,7 @@ fi
 
 # Применяем настройки в текущем окружении
 set +u #Отключим проверку обнаружения неопределенных переменных
-if source "$ROS_SETUP"; then
+if source $ROS_SETUP; then
     log_msg "Окружение ROS1 настроено успешно!"
 else
     log_msg "Ошибка: не удалось выполнить source $ROS_SETUP"
